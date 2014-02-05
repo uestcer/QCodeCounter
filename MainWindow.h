@@ -6,10 +6,11 @@
 #include <QVBoxLayout>
 #include <QMenuBar>
 #include <QGroupBox>
-#include <QTableView>
 #include <QHeaderView>
 #include <QStandardItemModel>
 #include <QPushButton>
+
+#include "PercentageTableView.h"
 
 class MainWindow : public QMainWindow
 {
@@ -29,7 +30,7 @@ private:
 	QVBoxLayout *leftLayout, *dirLayout, *fileTypeLayout;
 	QHBoxLayout *dirOpLayout, *fileTypeOpLayout;
 	QGroupBox *dirBox, *fileTypeBox;
-	QTableView *dirTableView, *fileTypeTableView;
+	PercentageTableView *dirTableView, *fileTypeTableView;
 	QStandardItemModel *dirModel;
 	QPushButton *dirAddBtn, *dirRemoveBtn, *fileTypeAddBtn, *fileTypeRemoveBtn;
 
@@ -37,7 +38,7 @@ private:
 	QVBoxLayout *rightLayout, *resultLayout;
 	QHBoxLayout *resultOpLayout;
 	QGroupBox *resultBox;
-	QTableView *resultTableView;
+	PercentageTableView *resultTableView;
 	QStandardItemModel *resultModel;
 	QPushButton *startBtn;
 

@@ -31,7 +31,7 @@ MainWindow::MainWindow(QWidget *parent)
 	dirModel->setHeaderData(0, Qt::Horizontal, tr("Directory"));
 	dirModel->setHeaderData(1, Qt::Horizontal, tr("Type"));
 	dirModel->setHeaderData(2, Qt::Horizontal, tr("Recursive"));
-	dirTableView = new QTableView();
+	dirTableView = new PercentageTableView();
 	dirTableView->setModel(dirModel);
 	dirTableView->verticalHeader()->setVisible(false);
 	dirTableView->setShowGrid(false);
@@ -47,7 +47,7 @@ MainWindow::MainWindow(QWidget *parent)
 	dirBox = new QGroupBox(tr("Code directory"));
 	dirBox->setLayout(dirLayout);
 
-	fileTypeTableView = new QTableView();
+	fileTypeTableView = new PercentageTableView();
 	fileTypeAddBtn = new QPushButton(tr("Add"));
 	fileTypeRemoveBtn = new QPushButton(tr("Remove"));
 	fileTypeOpLayout = new QHBoxLayout();
@@ -65,7 +65,7 @@ MainWindow::MainWindow(QWidget *parent)
 	/* 初始化右侧布局 */
 	resultModel = new QStandardItemModel(0, 4);
 	resultModel->setHeaderData(0, Qt::Horizontal, tr("File"));
-	resultTableView = new QTableView();
+	resultTableView = new PercentageTableView();
 	resultTableView->setModel(resultModel);
 	startBtn = new QPushButton(tr("Start"));
 	resultOpLayout = new QHBoxLayout();

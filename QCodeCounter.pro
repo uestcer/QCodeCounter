@@ -13,6 +13,8 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        MainWindow.cpp
+        MainWindow.cpp \
+    PercentageTableView.cpp
 
-HEADERS  += MainWindow.h
+HEADERS  += MainWindow.h \
+    PercentageTableView.h
