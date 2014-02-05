@@ -6,11 +6,12 @@
 #include <QVBoxLayout>
 #include <QMenuBar>
 #include <QGroupBox>
-#include <QHeaderView>
 #include <QStandardItemModel>
 #include <QPushButton>
 
 #include "PercentageTableView.h"
+#include "FileTypePlugin.h"
+#include "FileTypePluginManager.h"
 
 class MainWindow : public QMainWindow
 {
@@ -23,27 +24,35 @@ public:
 private:
 	/* 整体布局使用的控件 */
 	QWidget *widget;
-	QHBoxLayout *mainLayout;
+	QVBoxLayout *mainLayout;
 	QMenuBar *menuBar;
 
-	/* 左侧布局使用的控件 */
-	QVBoxLayout *leftLayout, *dirLayout, *fileTypeLayout;
-	QHBoxLayout *dirOpLayout, *fileTypeOpLayout;
-	QGroupBox *dirBox, *fileTypeBox;
-	PercentageTableView *dirTableView, *fileTypeTableView;
-	QStandardItemModel *dirModel;
-	QPushButton *dirAddBtn, *dirRemoveBtn, *fileTypeAddBtn, *fileTypeRemoveBtn;
+	/* 上侧布局使用的控件 */
+	QVBoxLayout *dirLayout, *ftLayout;
+	QHBoxLayout *topLayout, *dirOpLayout, *ftOpLayout;
+	QGroupBox *dirBox, *ftBox;
+	PercentageTableView *dirTableView, *ftTableView;
+	QStandardItemModel *dirModel, *ftModel;
+	QPushButton *dirAddBtn, *dirRemoveBtn, *ftAddBtn, *ftRemoveBtn;
 
-	/* 右侧布局使用的控件 */
-	QVBoxLayout *rightLayout, *resultLayout;
-	QHBoxLayout *resultOpLayout;
+	/* 下侧布局使用的控件 */
+	QVBoxLayout *resultLayout;
+	QHBoxLayout *bottomLayout, *resultOpLayout;
 	QGroupBox *resultBox;
 	PercentageTableView *resultTableView;
 	QStandardItemModel *resultModel;
 	QPushButton *startBtn;
 
+	/* 跟界面无关的变量 */
+	FileTypePluginManager ftPluginManager;
+	QList<FileTypePlugin *> ftPluginList, ftPluginChosenList;
+
 public slots:
 	void dirAddBtnClicked();
+	void dirRemoveBtnClicked();
+
+	void ftAddBtnClicked();
+	void ftRemoveBtnClicked();
 };
 
 #endif // MAINWINDOW_H

@@ -14,7 +14,13 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         MainWindow.cpp \
-    PercentageTableView.cpp
+    PercentageTableView.cpp \
+    FileTypePlugin.cpp \
+    FileTypePluginManager.cpp \
+    FileTypeChooseDialog.cpp
 
 HEADERS  += MainWindow.h \
-    PercentageTableView.h
+    PercentageTableView.h \
+    FileTypePlugin.h \
+    FileTypePluginManager.h \
+    FileTypeChooseDialog.h
