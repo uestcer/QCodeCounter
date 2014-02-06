@@ -147,19 +147,14 @@ MainWindow::ftAddBtnClicked()
 		QList<FileTypePlugin *> chosenList = dialog.getChosenList();
 		foreach (FileTypePlugin *i, chosenList) {
 			/* 判断已经被选中,则不需要重复添加 */
-			bool alreadyChosen = false;
-			foreach (FileTypePlugin *j, ftPluginChosenList) {
-				if (i == j) {
-					alreadyChosen = true;
-					break;
-				}
-			}
-			if (alreadyChosen) {
+			if (ftPluginChosenList.indexOf(i) != -1) {
 				continue;
 			}
 			ftPluginChosenList << i;
 			QList<QStandardItem *> items;
-			items << new QStandardItem(i->getName());
+			QStandardItem *item = new QStandardItem(i->getName());
+			item->setData(QVariant::fromValue((void *)i));
+			items << item;
 			items << new QStandardItem(i->getDetail());
 			ftModel->appendRow(items);
 		}
@@ -171,5 +166,8 @@ MainWindow::ftRemoveBtnClicked()
 {
 	foreach (QModelIndex i, ftTableView->selectionModel()->selectedRows()) {
 		QList<QStandardItem *> items = ftModel->takeRow(i.row());
+		QStandardItem *item = items.at(0);
+		FileTypePlugin *ftp = (FileTypePlugin *)item->data().value<void *>();
+		ftPluginChosenList.removeAll(ftp);
 	}
 }
