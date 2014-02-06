@@ -12,10 +12,13 @@
 #include "PercentageTableView.h"
 #include "FileTypePlugin.h"
 #include "FileTypePluginManager.h"
+#include "CounterThread.h"
 
 class MainWindow : public QMainWindow
 {
 	Q_OBJECT
+
+	friend class CounterThread;
 
 public:
 	MainWindow(QWidget *parent = 0);
@@ -47,6 +50,7 @@ private:
 	/* 跟界面无关的变量 */
 	FileTypePluginManager ftPluginManager;
 	QList<FileTypePlugin *> ftPluginList, ftPluginChosenList;
+	CounterThread counterThread;
 
 public slots:
 	void pathAddDirBtnClicked();

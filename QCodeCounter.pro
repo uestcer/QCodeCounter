@@ -17,10 +17,12 @@ SOURCES += main.cpp\
     PercentageTableView.cpp \
     FileTypePlugin.cpp \
     FileTypePluginManager.cpp \
-    FileTypeChooseDialog.cpp
+    FileTypeChooseDialog.cpp \
+    CounterThread.cpp
 
 HEADERS  += MainWindow.h \
     PercentageTableView.h \
     FileTypePlugin.h \
     FileTypePluginManager.h \
-    FileTypeChooseDialog.h
+    FileTypeChooseDialog.h \
+    CounterThread.h
