@@ -28,12 +28,13 @@ private:
 	QMenuBar *menuBar;
 
 	/* 上侧布局使用的控件 */
-	QVBoxLayout *dirLayout, *ftLayout;
-	QHBoxLayout *topLayout, *dirOpLayout, *ftOpLayout;
-	QGroupBox *dirBox, *ftBox;
-	PercentageTableView *dirTableView, *ftTableView;
-	QStandardItemModel *dirModel, *ftModel;
-	QPushButton *dirAddBtn, *dirRemoveBtn, *ftAddBtn, *ftRemoveBtn;
+	QVBoxLayout *pathLayout, *ftLayout;
+	QHBoxLayout *topLayout, *pathOpLayout, *ftOpLayout;
+	QGroupBox *pathBox, *ftBox;
+	PercentageTableView *pathTableView, *ftTableView;
+	QStandardItemModel *pathModel, *ftModel;
+	QPushButton *pathAddDirBtn, *pathAddFileBtn, *pathRemoveBtn;
+	QPushButton *ftAddBtn, *ftRemoveBtn;
 
 	/* 下侧布局使用的控件 */
 	QVBoxLayout *resultLayout;
@@ -48,11 +49,14 @@ private:
 	QList<FileTypePlugin *> ftPluginList, ftPluginChosenList;
 
 public slots:
-	void dirAddBtnClicked();
-	void dirRemoveBtnClicked();
+	void pathAddDirBtnClicked();
+	void pathAddFileBtnClicked();
+	void pathRemoveBtnClicked();
 
 	void ftAddBtnClicked();
 	void ftRemoveBtnClicked();
+
+	void startBtnClicked();
 };
 
 #endif // MAINWINDOW_H

@@ -31,33 +31,39 @@ MainWindow::MainWindow(QWidget *parent)
 	mainLayout->setMenuBar(menuBar);
 
 	/* 初始化左上侧布局 */
-	dirModel = new QStandardItemModel(0, 3);
-	dirModel->setHeaderData(0, Qt::Horizontal, tr("Directory"));
-	dirModel->setHeaderData(1, Qt::Horizontal, tr("Type"));
-	dirModel->setHeaderData(2, Qt::Horizontal, tr("Recursive"));
-	dirTableView = new PercentageTableView();
-	dirTableView->setModel(dirModel);
-	dirTableView->setShowGrid(false);
-	dirTableView->horizontalHeader()->setResizeMode(QHeaderView::Fixed);
-	dirTableView->verticalHeader()->setVisible(false);
-	dirTableView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-	dirTableView->setSelectionBehavior(QAbstractItemView::SelectRows);
-	dirTableView->setSelectionMode(QAbstractItemView::SingleSelection);
-	dirTableView->setColumnWidthPercent(0, 0.65);
-	dirTableView->setColumnWidthPercent(1, 0.15);
-	dirTableView->setColumnWidthPercent(2, 0.2);
-	dirAddBtn = new QPushButton(tr("Add"));
-	connect(dirAddBtn, SIGNAL(clicked()), this, SLOT(dirAddBtnClicked()));
-	dirRemoveBtn = new QPushButton(tr("Remove"));
-	connect(dirRemoveBtn, SIGNAL(clicked()), this, SLOT(dirRemoveBtnClicked()));
-	dirOpLayout = new QHBoxLayout();
-	dirOpLayout->addWidget(dirAddBtn);
-	dirOpLayout->addWidget(dirRemoveBtn);
-	dirLayout = new QVBoxLayout();
-	dirLayout->addWidget(dirTableView);
-	dirLayout->addLayout(dirOpLayout);
-	dirBox = new QGroupBox(tr("Code directory"));
-	dirBox->setLayout(dirLayout);
+	pathModel = new QStandardItemModel(0, 3);
+	pathModel->setHeaderData(0, Qt::Horizontal, tr("Path"));
+	pathModel->setHeaderData(1, Qt::Horizontal, tr("Type"));
+	pathModel->setHeaderData(2, Qt::Horizontal, tr("Recursive"));
+	pathTableView = new PercentageTableView();
+	pathTableView->setModel(pathModel);
+	pathTableView->setShowGrid(false);
+	pathTableView->horizontalHeader()->setResizeMode(QHeaderView::Fixed);
+	pathTableView->verticalHeader()->setVisible(false);
+	pathTableView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+	pathTableView->setSelectionBehavior(QAbstractItemView::SelectRows);
+	pathTableView->setSelectionMode(QAbstractItemView::SingleSelection);
+	pathTableView->setColumnWidthPercent(0, 0.65);
+	pathTableView->setColumnWidthPercent(1, 0.15);
+	pathTableView->setColumnWidthPercent(2, 0.2);
+	pathAddDirBtn = new QPushButton(tr("Add"));
+	connect(pathAddDirBtn, SIGNAL(clicked()), this,
+			SLOT(pathAddDirBtnClicked()));
+	pathAddFileBtn = new QPushButton(tr("Add File"));
+	connect(pathAddFileBtn, SIGNAL(clicked()), this,
+			SLOT(pathAddFileBtnClicked()));
+	pathRemoveBtn = new QPushButton(tr("Remove"));
+	connect(pathRemoveBtn, SIGNAL(clicked()), this,
+			SLOT(pathRemoveBtnClicked()));
+	pathOpLayout = new QHBoxLayout();
+	pathOpLayout->addWidget(pathAddDirBtn);
+	pathOpLayout->addWidget(pathAddFileBtn);
+	pathOpLayout->addWidget(pathRemoveBtn);
+	pathLayout = new QVBoxLayout();
+	pathLayout->addWidget(pathTableView);
+	pathLayout->addLayout(pathOpLayout);
+	pathBox = new QGroupBox(tr("Code path"));
+	pathBox->setLayout(pathLayout);
 
 	/* 初始化右上侧布局 */
 	ftModel = new QStandardItemModel(0, 2);
@@ -71,8 +77,8 @@ MainWindow::MainWindow(QWidget *parent)
 	ftTableView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	ftTableView->setSelectionBehavior(QAbstractItemView::SelectRows);
 	ftTableView->setSelectionMode(QAbstractItemView::SingleSelection);
-	ftTableView->setColumnWidthPercent(0, 0.4);
-	ftTableView->setColumnWidthPercent(1, 0.6);
+	ftTableView->setColumnWidthPercent(0, 0.3);
+	ftTableView->setColumnWidthPercent(1, 0.7);
 	ftAddBtn = new QPushButton(tr("Add"));
 	connect(ftAddBtn, SIGNAL(clicked()), this, SLOT(ftAddBtnClicked()));
 	ftRemoveBtn = new QPushButton(tr("Remove"));
@@ -86,17 +92,25 @@ MainWindow::MainWindow(QWidget *parent)
 	ftBox = new QGroupBox(tr("File type"));
 	ftBox->setLayout(ftLayout);
 
-	topLayout->addWidget(dirBox);
+	topLayout->addWidget(pathBox);
 	topLayout->addWidget(ftBox);
-	topLayout->setStretchFactor(dirBox, 60);
+	topLayout->setStretchFactor(pathBox, 60);
 	topLayout->setStretchFactor(ftBox, 40);
 
 	/* 初始化下侧布局 */
 	resultModel = new QStandardItemModel(0, 4);
 	resultModel->setHeaderData(0, Qt::Horizontal, tr("File"));
+	resultModel->setHeaderData(1, Qt::Horizontal, tr("Type"));
+	resultModel->setHeaderData(2, Qt::Horizontal, tr("Directory"));
+	resultModel->setHeaderData(3, Qt::Horizontal, tr("Total Lines"));
 	resultTableView = new PercentageTableView();
 	resultTableView->setModel(resultModel);
+	resultTableView->setColumnWidthPercent(0, 0.15);
+	resultTableView->setColumnWidthPercent(1, 0.15);
+	resultTableView->setColumnWidthPercent(2, 0.4);
+	resultTableView->setColumnWidthPercent(3, 0.3);
 	startBtn = new QPushButton(tr("Start"));
+	connect(startBtn, SIGNAL(clicked()), this, SLOT(startBtnClicked()));
 	resultOpLayout = new QHBoxLayout();
 	resultOpLayout->addWidget(startBtn);
 	resultLayout = new QVBoxLayout();
@@ -116,26 +130,54 @@ MainWindow::~MainWindow()
 }
 
 void
-MainWindow::dirAddBtnClicked()
+MainWindow::pathAddDirBtnClicked()
 {
-	QString dir = QFileDialog::getExistingDirectory(this);
+	QString dir = QFileDialog::getExistingDirectory(this,
+													tr("Select Code Directory"),
+													QDir::homePath());
 	if (dir != "") {
-		if (dirModel->findItems(dir, Qt::MatchExactly, 0).count() != 0) {
+		if (pathModel->findItems(dir, Qt::MatchExactly, 0).count() != 0) {
 			return;
 		}
 		QList<QStandardItem *> items;
-		items << new QStandardItem(dir);
+		QStandardItem *item = new QStandardItem(dir);
+		item->setToolTip(dir);
+		item->setEditable(false);
+		items << item;
 		items << new QStandardItem("+");
 		items << new QStandardItem(tr("Yes"));
-		dirModel->appendRow(items);
+		pathModel->appendRow(items);
 	}
 }
 
 void
-MainWindow::dirRemoveBtnClicked()
+MainWindow::pathAddFileBtnClicked()
 {
-	foreach (QModelIndex i, dirTableView->selectionModel()->selectedRows()) {
-		dirModel->takeRow(i.row());
+	QStringList files = QFileDialog::getOpenFileNames(this,
+													  tr("Select Code Files"),
+													  QDir::homePath());
+	if (!files.empty()) {
+		foreach (QString file, files) {
+			if (pathModel->findItems(file, Qt::MatchExactly, 0).count() != 0) {
+				continue;
+			}
+			QList<QStandardItem *> items;
+			QStandardItem *item = new QStandardItem(file);
+			item->setToolTip(file);
+			item->setEditable(false);
+			items << item;
+			items << new QStandardItem("+");
+			items << new QStandardItem(tr("N/A"));
+			pathModel->appendRow(items);
+		}
+	}
+}
+
+void
+MainWindow::pathRemoveBtnClicked()
+{
+	foreach (QModelIndex i, pathTableView->selectionModel()->selectedRows()) {
+		pathModel->takeRow(i.row());
 	}
 }
 
@@ -170,4 +212,9 @@ MainWindow::ftRemoveBtnClicked()
 		FileTypePlugin *ftp = (FileTypePlugin *)item->data().value<void *>();
 		ftPluginChosenList.removeAll(ftp);
 	}
+}
+
+void
+MainWindow::startBtnClicked()
+{
 }
