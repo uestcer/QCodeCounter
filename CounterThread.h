@@ -3,11 +3,18 @@
 
 #include <QThread>
 
+class MainWindow;
+
 class CounterThread : public QThread
 {
 	Q_OBJECT
 public:
-	explicit CounterThread(QObject *parent = 0);
+	explicit CounterThread(MainWindow *mainWindow, QObject *parent = 0);
+
+	virtual void run();
+
+private:
+	MainWindow *mainWindow;
 
 signals:
 

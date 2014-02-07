@@ -6,7 +6,7 @@
 #include "FileTypeChooseDialog.h"
 
 MainWindow::MainWindow(QWidget *parent)
-	: QMainWindow(parent)
+	: QMainWindow(parent), counterThread(this)
 {
 	/* 设置窗口标题 */
 	this->setWindowTitle(tr("QCodeCounter"));
@@ -217,4 +217,12 @@ MainWindow::ftRemoveBtnClicked()
 void
 MainWindow::startBtnClicked()
 {
+	if (counterThread.isRunning()) {
+		counterThread.terminate();
+		counterThread.wait();
+		startBtn->setText(tr("Start"));
+	} else {
+		counterThread.start();
+		startBtn->setText(tr("Stop"));
+	}
 }
