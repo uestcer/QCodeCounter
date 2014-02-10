@@ -4,6 +4,7 @@
 
 #include "MainWindow.h"
 #include "FileTypeChooseDialog.h"
+#include "CheckBoxDelegate.h"
 
 MainWindow::MainWindow(QWidget *parent)
 	: QMainWindow(parent), counterThread(this)
@@ -37,6 +38,7 @@ MainWindow::MainWindow(QWidget *parent)
 	pathModel->setHeaderData(2, Qt::Horizontal, tr("Recursive"));
 	pathTableView = new PercentageTableView();
 	pathTableView->setModel(pathModel);
+	pathTableView->setItemDelegateForColumn(2, new CheckBoxDelegate(pathTableView));
 	pathTableView->setShowGrid(false);
 	pathTableView->horizontalHeader()->setResizeMode(QHeaderView::Fixed);
 	pathTableView->verticalHeader()->setVisible(false);
@@ -140,7 +142,8 @@ MainWindow::pathAddDirBtnClicked()
 			return;
 		}
 		QList<QStandardItem *> items;
-		QStandardItem *item = new QStandardItem(dir);
+		QStandardItem *item;
+		item = new QStandardItem(dir);
 		item->setToolTip(dir);
 		item->setEditable(false);
 		items << item;
@@ -154,20 +157,23 @@ void
 MainWindow::pathAddFileBtnClicked()
 {
 	QStringList files = QFileDialog::getOpenFileNames(this,
-													  tr("Select Code Files"),
-													  QDir::homePath());
+													 tr("Select Code Files"),
+													 QDir::homePath());
 	if (!files.empty()) {
 		foreach (QString file, files) {
 			if (pathModel->findItems(file, Qt::MatchExactly, 0).count() != 0) {
 				continue;
 			}
 			QList<QStandardItem *> items;
-			QStandardItem *item = new QStandardItem(file);
+			QStandardItem *item;
+			item = new QStandardItem(file);
 			item->setToolTip(file);
 			item->setEditable(false);
 			items << item;
 			items << new QStandardItem("+");
-			items << new QStandardItem(tr("N/A"));
+			item = new QStandardItem(tr("N/A"));
+			item->setEditable(false);
+			items << item;
 			pathModel->appendRow(items);
 		}
 	}
