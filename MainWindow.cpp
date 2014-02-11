@@ -4,7 +4,6 @@
 
 #include "MainWindow.h"
 #include "FileTypeChooseDialog.h"
-#include "CheckBoxDelegate.h"
 
 MainWindow::MainWindow(QWidget *parent)
 	: QMainWindow(parent), counterThread(this)
@@ -34,20 +33,19 @@ MainWindow::MainWindow(QWidget *parent)
 	/* 初始化左上侧布局 */
 	pathModel = new QStandardItemModel(0, 3);
 	pathModel->setHeaderData(0, Qt::Horizontal, tr("Path"));
-	pathModel->setHeaderData(1, Qt::Horizontal, tr("Type"));
+	pathModel->setHeaderData(1, Qt::Horizontal, tr("Exclude"));
 	pathModel->setHeaderData(2, Qt::Horizontal, tr("Recursive"));
 	pathTableView = new PercentageTableView();
 	pathTableView->setModel(pathModel);
-	pathTableView->setItemDelegateForColumn(2, new CheckBoxDelegate(pathTableView));
 	pathTableView->setShowGrid(false);
 	pathTableView->horizontalHeader()->setResizeMode(QHeaderView::Fixed);
 	pathTableView->verticalHeader()->setVisible(false);
 	pathTableView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	pathTableView->setSelectionBehavior(QAbstractItemView::SelectRows);
 	pathTableView->setSelectionMode(QAbstractItemView::SingleSelection);
-	pathTableView->setColumnWidthPercent(0, 0.65);
+	pathTableView->setColumnWidthPercent(0, 0.7);
 	pathTableView->setColumnWidthPercent(1, 0.15);
-	pathTableView->setColumnWidthPercent(2, 0.2);
+	pathTableView->setColumnWidthPercent(2, 0.15);
 	pathAddDirBtn = new QPushButton(tr("Add"));
 	connect(pathAddDirBtn, SIGNAL(clicked()), this,
 			SLOT(pathAddDirBtnClicked()));
@@ -147,8 +145,16 @@ MainWindow::pathAddDirBtnClicked()
 		item->setToolTip(dir);
 		item->setEditable(false);
 		items << item;
-		items << new QStandardItem("+");
-		items << new QStandardItem(tr("Yes"));
+		item = new QStandardItem();
+		item->setCheckable(true);
+		item->setCheckState(Qt::Unchecked);
+		item->setEditable(false);
+		items << item;
+		item = new QStandardItem();
+		item->setCheckable(true);
+		item->setCheckState(Qt::Checked);
+		item->setEditable(false);
+		items << item;
 		pathModel->appendRow(items);
 	}
 }
@@ -170,8 +176,14 @@ MainWindow::pathAddFileBtnClicked()
 			item->setToolTip(file);
 			item->setEditable(false);
 			items << item;
-			items << new QStandardItem("+");
-			item = new QStandardItem(tr("N/A"));
+			item = new QStandardItem();
+			item->setCheckable(true);
+			item->setCheckState(Qt::Unchecked);
+			item->setEditable(false);
+			items << item;
+			item = new QStandardItem();
+			item->setCheckable(false);
+			item->setCheckState(Qt::Unchecked);
 			item->setEditable(false);
 			items << item;
 			pathModel->appendRow(items);

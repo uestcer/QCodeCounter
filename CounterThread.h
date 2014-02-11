@@ -2,6 +2,8 @@
 #define COUNTERTHREAD_H
 
 #include <QThread>
+#include <QStringList>
+#include <QFileInfo>
 
 class MainWindow;
 
@@ -14,6 +16,9 @@ public:
 	virtual void run();
 
 private:
+	QStringList getCodeFileList(const QFileInfo &info, bool recursive);
+	bool isCodeFile(const QString &name);
+
 	MainWindow *mainWindow;
 
 signals:

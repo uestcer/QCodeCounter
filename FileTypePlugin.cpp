@@ -5,10 +5,12 @@ FileTypePlugin::FileTypePlugin()
 }
 
 FileTypePlugin::FileTypePlugin(PluginType pluginType, const QString &name,
-							   const QString &detail, bool builtIn)
+							   const QString &value, const QString &detail,
+							   bool builtIn)
 {
 	this->pluginType = pluginType;
 	this->name = name;
+	this->value = value;
 	this->detail = detail;
 	this->builtIn = builtIn;
 }
@@ -63,4 +65,16 @@ bool
 FileTypePlugin::getBuiltIn()
 {
 	return this->builtIn;
+}
+
+bool
+FileTypePlugin::isMatch(const QString &name)
+{
+	if (this->pluginType == PluginTypeFullName) {
+		return name == this->value;
+	} else if (this->pluginType == PluginTypeSuffix) {
+		return name.endsWith(this->value);
+	} else {
+		return false;
+	}
 }
