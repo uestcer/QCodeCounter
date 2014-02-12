@@ -1,6 +1,7 @@
 #include <QFileDialog>
 #include <QList>
 #include <QHeaderView>
+#include <QApplication>
 
 #include "MainWindow.h"
 #include "FileTypeChooseDialog.h"
@@ -28,6 +29,7 @@ MainWindow::MainWindow(QWidget *parent)
 	QMenu *menu;
 	menuBar = new QMenuBar(this);
 	menu = menuBar->addMenu(tr("File"));
+	menu->addAction(tr("Quit"), qApp, SLOT(quit()));
 	mainLayout->setMenuBar(menuBar);
 
 	/* 初始化左上侧布局 */
@@ -43,9 +45,9 @@ MainWindow::MainWindow(QWidget *parent)
 	pathTableView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	pathTableView->setSelectionBehavior(QAbstractItemView::SelectRows);
 	pathTableView->setSelectionMode(QAbstractItemView::SingleSelection);
-	pathTableView->setColumnWidthPercent(0, 0.7);
+	pathTableView->setColumnWidthPercent(0, 0.65);
 	pathTableView->setColumnWidthPercent(1, 0.15);
-	pathTableView->setColumnWidthPercent(2, 0.15);
+	pathTableView->setColumnWidthPercent(2, 0.2);
 	pathAddDirBtn = new QPushButton(tr("Add"));
 	connect(pathAddDirBtn, SIGNAL(clicked()), this,
 			SLOT(pathAddDirBtnClicked()));
