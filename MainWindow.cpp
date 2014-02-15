@@ -100,17 +100,20 @@ MainWindow::MainWindow(QWidget *parent)
 	topLayout->setStretchFactor(ftBox, 40);
 
 	/* 初始化下侧布局 */
-	resultModel = new QStandardItemModel(0, 4);
+	resultModel = new QStandardItemModel(0, 6);
 	resultModel->setHeaderData(0, Qt::Horizontal, tr("File"));
-	resultModel->setHeaderData(1, Qt::Horizontal, tr("Type"));
-	resultModel->setHeaderData(2, Qt::Horizontal, tr("Directory"));
-	resultModel->setHeaderData(3, Qt::Horizontal, tr("Total Lines"));
-	resultTableView = new PercentageTableView();
+	resultModel->setHeaderData(1, Qt::Horizontal, tr("Directory"));
+	resultModel->setHeaderData(2, Qt::Horizontal, tr("Total Lines"));
+	resultModel->setHeaderData(3, Qt::Horizontal, tr("Code Lines"));
+	resultModel->setHeaderData(4, Qt::Horizontal, tr("Comment Lines"));
+	resultModel->setHeaderData(5, Qt::Horizontal, tr("Empty Lines"));
+	resultTableView = new QTableView();
 	resultTableView->setModel(resultModel);
-	resultTableView->setColumnWidthPercent(0, 0.15);
-	resultTableView->setColumnWidthPercent(1, 0.15);
-	resultTableView->setColumnWidthPercent(2, 0.4);
-	resultTableView->setColumnWidthPercent(3, 0.3);
+	resultTableView->setShowGrid(false);
+	resultTableView->verticalHeader()->setVisible(false);
+	resultTableView->horizontalHeader()->setDefaultSectionSize(120);
+	resultTableView->horizontalHeader()->setMinimumSectionSize(100);
+	resultTableView->horizontalHeader()->setStretchLastSection(true);
 	startBtn = new QPushButton(tr("Start"));
 	connect(startBtn, SIGNAL(clicked()), this, SLOT(startBtnClicked()));
 	resultOpLayout = new QHBoxLayout();

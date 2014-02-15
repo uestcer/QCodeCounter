@@ -43,7 +43,7 @@ private:
 	QVBoxLayout *resultLayout;
 	QHBoxLayout *bottomLayout, *resultOpLayout;
 	QGroupBox *resultBox;
-	PercentageTableView *resultTableView;
+	QTableView *resultTableView;
 	QStandardItemModel *resultModel;
 	QPushButton *startBtn;
 

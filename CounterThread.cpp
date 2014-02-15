@@ -13,6 +13,8 @@ CounterThread::CounterThread(MainWindow *mainWindow, QObject *parent) :
 void
 CounterThread::run()
 {
+	/* 清除之前的统计结果 */
+	mainWindow->resultModel->removeRows(0, mainWindow->resultModel->rowCount());
 	/* 获取代码文件名列表 */
 	QMap<QString, FileTypePlugin *> codeFileList;
 	QMap<QString, FileTypePlugin *> excludeList;
@@ -41,10 +43,18 @@ CounterThread::run()
 	QMap<QString, FileTypePlugin *>::ConstIterator i;
 	struct CountResult result;
 	for (i = codeFileList.begin(); i != codeFileList.end(); ++i) {
-		printf("%s\n", i.key().toStdString().c_str());
-		fflush(stdout);
 		Counter::count(i.key(), i.value(), &result);
+		QFileInfo info(i.key());
+		QList<QStandardItem *> items;
+		items << new QStandardItem(info.fileName());
+		items << new QStandardItem(info.absolutePath());
+		items << new QStandardItem(QString("%1").arg(result.totalLines));
+		items << new QStandardItem(QString("%1").arg(result.codeLines));
+		items << new QStandardItem(QString("%1").arg(result.commentLines));
+		items << new QStandardItem(QString("%1").arg(result.emptyLines));
+		mainWindow->resultModel->appendRow(items);
 	}
+	mainWindow->resultTableView->resizeColumnToContents(0);
 	/* 线程结束之前,把按钮设置为Start */
 	mainWindow->startBtn->setText(tr("Start"));
 }
