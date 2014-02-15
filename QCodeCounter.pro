@@ -19,7 +19,8 @@ SOURCES += main.cpp\
     FileTypePluginManager.cpp \
     FileTypeChooseDialog.cpp \
     CounterThread.cpp \
-    CheckBoxDelegate.cpp
+    CheckBoxDelegate.cpp \
+    Counter.cpp
 
 HEADERS  += MainWindow.h \
     PercentageTableView.h \
@@ -27,4 +28,5 @@ HEADERS  += MainWindow.h \
     FileTypePluginManager.h \
     FileTypeChooseDialog.h \
     CounterThread.h \
-    CheckBoxDelegate.h
+    CheckBoxDelegate.h \
+    Counter.h

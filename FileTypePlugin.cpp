@@ -68,12 +68,12 @@ FileTypePlugin::getBuiltIn()
 }
 
 bool
-FileTypePlugin::isMatch(const QString &name)
+FileTypePlugin::isMatch(const QString &filename)
 {
 	if (this->pluginType == PluginTypeFullName) {
-		return name == this->value;
+		return filename == this->value;
 	} else if (this->pluginType == PluginTypeSuffix) {
-		return name.endsWith(this->value);
+		return filename.endsWith(this->value);
 	} else {
 		return false;
 	}

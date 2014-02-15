@@ -2,8 +2,10 @@
 #define COUNTERTHREAD_H
 
 #include <QThread>
-#include <QStringList>
 #include <QFileInfo>
+#include <QMap>
+
+#include "FileTypePlugin.h"
 
 class MainWindow;
 
@@ -16,8 +18,9 @@ public:
 	virtual void run();
 
 private:
-	QStringList getCodeFileList(const QFileInfo &info, bool recursive);
-	bool isCodeFile(const QString &name);
+	void getCodeFileList(QMap<QString, FileTypePlugin *> *list,
+						 const QFileInfo &info, bool recursive);
+	FileTypePlugin *getFileTypePlugin(const QString &filename);
 
 	MainWindow *mainWindow;
 
