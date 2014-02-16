@@ -4,17 +4,6 @@ FileTypePlugin::FileTypePlugin()
 {
 }
 
-FileTypePlugin::FileTypePlugin(PluginType pluginType, const QString &name,
-							   const QString &value, const QString &detail,
-							   bool builtIn)
-{
-	this->pluginType = pluginType;
-	this->name = name;
-	this->value = value;
-	this->detail = detail;
-	this->builtIn = builtIn;
-}
-
 FileTypePlugin::~FileTypePlugin()
 {
 }
@@ -44,6 +33,18 @@ FileTypePlugin::getName()
 }
 
 void
+FileTypePlugin::setValue(const QString &value)
+{
+	this->value = value;
+}
+
+const QString &
+FileTypePlugin::getValue()
+{
+	return this->value;
+}
+
+void
 FileTypePlugin::setDetail(const QString &detail)
 {
 	this->detail = detail;
@@ -53,6 +54,32 @@ const QString &
 FileTypePlugin::getDetail()
 {
 	return this->detail;
+}
+
+void
+FileTypePlugin::setSingleLineComment(const QStringList &singleLineComment)
+{
+	this->singleLineComment = singleLineComment;
+	/* 先清空已有的正则表达式,再生成正则表达式 */
+	foreach (QRegExp *rx, this->singleLineCommentRegExp) {
+		delete rx;
+	}
+	foreach (QString comment, this->singleLineComment) {
+		QRegExp *rx = new QRegExp(QString("^\\s*%1.*$").arg(comment));
+		this->singleLineCommentRegExp << rx;
+	}
+}
+
+const QStringList &
+FileTypePlugin::getSingleLineComment()
+{
+	return this->singleLineComment;
+}
+
+const QList<QRegExp *> &
+FileTypePlugin::getSingleLineCommentRegExp()
+{
+	return this->singleLineCommentRegExp;
 }
 
 void

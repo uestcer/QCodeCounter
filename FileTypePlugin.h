@@ -2,6 +2,9 @@
 #define FILETYPEPLUGIN_H
 
 #include <QString>
+#include <QStringList>
+#include <QList>
+#include <QRegExp>
 
 class FileTypePlugin
 {
@@ -12,9 +15,6 @@ public:
 	};
 
 	FileTypePlugin();
-	FileTypePlugin(PluginType pluginType, const QString &name,
-				   const QString &value, const QString &detail,
-				   bool builtIn = true);
 	virtual ~FileTypePlugin();
 
 	void setPluginType(PluginType pluginType);
@@ -29,6 +29,10 @@ public:
 	void setDetail(const QString &detail);
 	const QString &getDetail();
 
+	void setSingleLineComment(const QStringList &singleLineComment);
+	const QStringList &getSingleLineComment();
+	const QList<QRegExp *> &getSingleLineCommentRegExp();
+
 	void setBuiltIn(bool builtIn);
 	bool getBuiltIn();
 
@@ -39,6 +43,8 @@ private:
 	QString name;
 	QString value;
 	QString detail;
+	QStringList singleLineComment;
+	QList<QRegExp *> singleLineCommentRegExp;
 	bool builtIn;
 };
 

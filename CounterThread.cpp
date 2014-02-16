@@ -3,7 +3,6 @@
 
 #include "CounterThread.h"
 #include "MainWindow.h"
-#include "Counter.h"
 
 CounterThread::CounterThread(MainWindow *mainWindow, QObject *parent) :
 	QThread(parent), mainWindow(mainWindow)
@@ -43,7 +42,7 @@ CounterThread::run()
 	QMap<QString, FileTypePlugin *>::ConstIterator i;
 	struct CountResult result;
 	for (i = codeFileList.begin(); i != codeFileList.end(); ++i) {
-		Counter::count(i.key(), i.value(), &result);
+		counter.count(i.key(), i.value(), &result);
 		QFileInfo info(i.key());
 		QList<QStandardItem *> items;
 		items << new QStandardItem(info.fileName());

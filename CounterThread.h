@@ -6,6 +6,7 @@
 #include <QMap>
 
 #include "FileTypePlugin.h"
+#include "Counter.h"
 
 class MainWindow;
 
@@ -23,6 +24,7 @@ private:
 	FileTypePlugin *getFileTypePlugin(const QString &filename);
 
 	MainWindow *mainWindow;
+	Counter counter;
 
 signals:
 
