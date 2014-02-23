@@ -34,13 +34,16 @@ Counter::count(const QString &filename, FileTypePlugin *ftp,
 		/* 判断空行 */
 		if (line.length() == 0 || emptyLineRegExp.exactMatch(line)) {
 			result->emptyLines++;
+			continue;
 		}
 		/* 判断单行注释 */
 		foreach (QRegExp *rx, singleLineCommentRegExp) {
 			if (rx->exactMatch(line)) {
 				result->commentLines++;
-				break;
+				continue;
 			}
 		}
+		/* 为代码行加1 */
+		result->codeLines++;
 	}
 }

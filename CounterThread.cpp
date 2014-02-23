@@ -41,6 +41,7 @@ CounterThread::run()
 	/* 对代码文件进行统计 */
 	QMap<QString, FileTypePlugin *>::ConstIterator i;
 	struct CountResult result;
+	struct CountResult total = {0, 0, 0, 0};
 	for (i = codeFileList.begin(); i != codeFileList.end(); ++i) {
 		counter.count(i.key(), i.value(), &result);
 		QFileInfo info(i.key());
@@ -52,7 +53,22 @@ CounterThread::run()
 		items << new QStandardItem(QString("%1").arg(result.commentLines));
 		items << new QStandardItem(QString("%1").arg(result.emptyLines));
 		mainWindow->resultModel->appendRow(items);
+		/* 统计合计信息 */
+		total.totalLines += result.totalLines;
+		total.codeLines += result.codeLines;
+		total.commentLines += result.commentLines;
+		total.emptyLines += result.emptyLines;
 	}
+	/* 显示合计信息 */
+	QList<QStandardItem *> items;
+	items << new QStandardItem("Total");
+	items << new QStandardItem();
+	items << new QStandardItem(QString("%1").arg(total.totalLines));
+	items << new QStandardItem(QString("%1").arg(total.codeLines));
+	items << new QStandardItem(QString("%1").arg(total.commentLines));
+	items << new QStandardItem(QString("%1").arg(total.emptyLines));
+	mainWindow->resultModel->appendRow(items);
+	/* 适应表格 */
 	mainWindow->resultTableView->resizeColumnToContents(0);
 	/* 线程结束之前,把按钮设置为Start */
 	mainWindow->startBtn->setText(tr("Start"));

@@ -30,3 +30,5 @@ HEADERS  += MainWindow.h \
     CounterThread.h \
     CheckBoxDelegate.h \
     Counter.h
+
+TRANSLATIONS += QCodeCounter_zh_CN.ts
